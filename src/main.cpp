@@ -222,7 +222,6 @@ void loop()
             
         }
 
-
         quiz_limit = (10 /((combo / 10) + 1)) * (10 / quiz_difficulty) * 70 ;
 
         if (printq == 4){
