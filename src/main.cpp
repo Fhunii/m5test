@@ -1,6 +1,5 @@
 // Last update: 2021-09-26 20:00:00
 
-#include <Arduino.h>
 #define LGFX_M5STACK_CORE2
 #include <M5Core2.h>
 #define LGFX_AUTODETECT
