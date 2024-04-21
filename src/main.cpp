@@ -159,7 +159,7 @@ void loop()
 
             M5.Lcd.setCursor(0, 0);
             M5.Lcd.setTextSize(3);
-            M5.Lcd.print("Press B button to start.\nPress A button to reset pitch.\nPress C button to back.\n        BBB\n        BBB\n       BBBBB\n        BBB\n   A     B     C");
+            M5.Lcd.print("Press B button to start.\nPress A button to reset pitch.\n        BBB\n        BBB\n        BBB\n       BBBBB\n        BBB\n   A     B     C");
             room0_flag = 1;
 
         }
@@ -168,13 +168,6 @@ void loop()
             room = 2;
             M5.Lcd.fillScreen(BLACK);
             quiz_time = millis();
-            
-        }
-        if (M5.BtnC.isPressed()) {
-
-            room = -1;
-            M5.Lcd.fillScreen(BLACK);
-            room0_flag = 0;
             
         }
 
