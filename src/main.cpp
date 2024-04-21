@@ -1,4 +1,6 @@
+// Last update: 2021-09-26 20:00:00
 
+#include <Arduino.h>
 #define LGFX_M5STACK_CORE2
 #include <M5Core2.h>
 #define LGFX_AUTODETECT
@@ -69,8 +71,8 @@ void vibration() {
 
 void setup()
 {
-    M5.begin();    // Init M5Core.  初始化 M5Core
-    M5.IMU.Init(); // Init IMU sensor.  初始化惯性传感器
+    M5.begin();    // Init M5Core.  M5Coreを初期化する
+    M5.IMU.Init(); // Init IMU sensor.  IMUセンサを初期化する
     lcd.init();
     lcd.setBrightness(255);
     srand(time(NULL));
@@ -78,13 +80,6 @@ void setup()
     circle_x = lcd.width() / 2;
     circle_y = lcd.height() / 2;
     
-    //sprite.fillScreen(GREEN); // Set the screen background color to black.
-                              // 设置屏幕背景色为黑色
-    lcd.setTextColor(
-        GREEN,
-        BLACK);            // Sets the foreground color and background color of the
-                           // displayed text.  设置显示文本的前景颜色和背景颜色
-    //lcd.setTextSize(2); // Set the font size.  设置字体大小
     sprite.setColorDepth(8);
     sprite.createSprite(lcd.width(), lcd.height()); 
 
@@ -94,8 +89,7 @@ void loop()
 {       
     
     M5.update();
-    if (room == -1){
-
+    if (room == -1) {
         combo = 0;
         pitch = 0.0F;
         roll = 0.0F;
@@ -122,14 +116,11 @@ void loop()
         circle_y = lcd.height() / 2;
         room0_flag = 0;
         room = 0;
-        for (j=0;j<4;j++)
+        for (j = 0; j < 4; j++)
             ans[j] = 0;
-
     }
-    if (room == 0){
-
-        if (room0_flag == 0){
-
+    if (room == 0) {
+        if (room0_flag == 0) {
             M5.Lcd.setCursor(0, 0);
             M5.Lcd.setTextSize(3);
             M5.Lcd.printf("select difficulty level.\nhighscore:");
@@ -229,7 +220,7 @@ void loop()
             sprite.setCursor(20, 65);
             sprite.setTextSize(5);
             sprite.printf("GAME OVER");
-            sprite.setCursor(50, 180);
+            sprite.setCursor(50, 20);
             sprite.setTextSize(2);
             sprite.printf("press B to restart.");
             limit_time = quiz_limit;
