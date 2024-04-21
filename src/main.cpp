@@ -229,17 +229,14 @@ void loop()
 
             if (M5.BtnB.wasReleased()) 
                 room = -1;
-
         }
 
-        if (printq != 4){
+        if (printq != 4) {
             
             limit_time = millis() - quiz_time;
             
-            if (printq == 2){
-
-                if (ans[goal_st % 4] == 1){//正解
-
+            if (printq == 2) {
+                if (ans[goal_st % 4] == 1) { //正解
                     printq = 3;
                     srand(time(NULL));
                     question = 0 + (int)(rand() * (quiz_difficulty * 5 - 0 + 1.0) / (1.0 + RAND_MAX));
@@ -247,134 +244,87 @@ void loop()
                     millis_time = 0;
                     vibration();
                     combo += 1;
-
-
-                }else{//不正解
-
+                } else { //不正解
                     printq = 4;
                     M5.Axp.SetLDOEnable(3, true);  // 3番をtrueにしてバイブレーション開始
                     delay(3000);                   // バイブレーションの長さ（ms）はお好みで調整
                     M5.Axp.SetLDOEnable(3, false); // 3番をfalseにしてバイブレーション修了
-
                 }
-                
             }
 
-            if (printq == 3){
-                
+            if (printq == 3) {
                 quiz = "";
-                
-                for (j=0;j<4;j++)
-
+                for (j = 0; j < 4; j++)
                     ans[j] = 0;
-
                 printq = 0;
-
             }
 
-            for (qi = 0; qi < (question / 4); qi++){
-
-                if (printq == 0){
-
+            for (qi = 0; qi < (question / 4); qi++) {
+                if (printq == 0) {
                     quiz += "\n     not";
-
-                    for (j=0;j<4;j++)
+                    for (j = 0; j < 4; j++)
                         ans[j] = !ans[j];
-                    
                 }
-
             }
 
-            if (question % 4 == 0){
-
-                if (printq == 0){
-
+            if (question % 4 == 0) {
+                if (printq == 0) {
                     quiz += "\n     up";
                     ans[0] = !ans[0];
-                    
                     printq = 1;
-
                 }
-                
             }
             
-            if (question % 4 == 1){
-
-                if (printq == 0){
-
+            if (question % 4 == 1) {
+                if (printq == 0) {
                     quiz += "\n     down";
                     ans[1] = !ans[1];  
                     printq = 1;
                 }   
-
             }
 
-            if (question % 4 == 2){
-
-                if (printq == 0){
-
+            if (question % 4 == 2) {
+                if (printq == 0) {
                     quiz += "\n     right";
                     ans[2] = !ans[2]; 
                     printq = 1;
                 }      
-
             }
 
-            if (question % 4 == 3){
-
-                if (printq == 0){
-
+            if (question % 4 == 3) {
+                if (printq == 0) {
                     quiz += "\n     left";
                     ans[3] = !ans[3]; 
                     printq = 1;
-                    
                 }
-                
             }
-
-
-            
 
             // 円の座標の指定
             circle_x += repitch / 2 ;
             circle_y += reroll / 2 ;
-            if (circle_y <= 0){
-
+            if (circle_y <= 0) {
                 circle_y += lcd.height();
                 goal_st = 0;
-
                 printq = 2;
-                
             }
-            if (circle_y >= lcd.height()){
-
+            if (circle_y >= lcd.height()) {
                 circle_y += -lcd.height();
                 goal_st = 1;
-
                 printq = 2;
-
             } 
-            if (circle_x >= lcd.width()){
-
+            if (circle_x >= lcd.width()) {
                 circle_x += -lcd.width();
                 goal_st = 2;
-
                 printq = 2;
-
             }
-            if (circle_x <= 0){
-            
+            if (circle_x <= 0) {
                 circle_x = lcd.width();
                 goal_st = 3;
-
                 printq = 2;
-
             }
             sprite.fillRect(lcd.width() * limit_time/quiz_limit/2, lcd.height() * limit_time/quiz_limit/2, 
             lcd.width() * (quiz_limit-limit_time)/quiz_limit, lcd.height() * (quiz_limit-limit_time)/quiz_limit, RED);
-
         }
-
         // sprite.setTextSize(5);
         // sprite.printf("%d",printq);
         // sprite.setTextSize(1);
