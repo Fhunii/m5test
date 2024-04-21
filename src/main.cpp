@@ -87,9 +87,10 @@ void setup()
 
 void loop()
 {       
-    
     M5.update();
+    
     if (room == -1) {
+        // Reset all variables and flags
         combo = 0;
         pitch = 0.0F;
         roll = 0.0F;
@@ -119,104 +120,95 @@ void loop()
         for (j = 0; j < 4; j++)
             ans[j] = 0;
     }
+    
     if (room == 0) {
         if (room0_flag == 0) {
+            // Display difficulty selection screen
             M5.Lcd.setCursor(0, 0);
             M5.Lcd.setTextSize(3);
             M5.Lcd.printf("select difficulty level.\nhighscore:");
             M5.Lcd.printf("%d", highscore);
             M5.Lcd.printf("\n\n    Difficulty\n\n\n   A <<< B <<< C");
             room0_flag = 1;
-
         }
+        
         if (M5.BtnA.isPressed()) {
-
+            // Start game with difficulty level A
             room = 1;
             quiz_difficulty = 1;
             M5.Lcd.fillScreen(BLACK);
             room0_flag = 0;
-            
         }
+        
         if (M5.BtnB.wasReleased()) {
-
+            // Start game with difficulty level B
             room = 1;
             quiz_difficulty = 2;
             M5.Lcd.fillScreen(BLACK);
             room0_flag = 0;
-            
         }
+        
         if (M5.BtnC.isPressed()) {
-
+            // Start game with difficulty level C
             room = 1;
             quiz_difficulty = 3;
             M5.Lcd.fillScreen(BLACK);
             room0_flag = 0;
-
         }
-
     }
+    
     if (room == 1){
         if (room0_flag == 0){
-
+            // Display game instructions
             M5.Lcd.setCursor(0, 0);
             M5.Lcd.setTextSize(3);
             M5.Lcd.print("Press B button to start.\nPress A button to reset pitch.\n        BBB\n        BBB\n        BBB\n       BBBBB\n        BBB\n   A     B     C");
             room0_flag = 1;
-
         }
+        
         if (M5.BtnB.isPressed()) {
-
+            // Start the game
             room = 2;
             M5.Lcd.fillScreen(BLACK);
             quiz_time = millis();
-            
         }
-
     }
 
     if (room == 2){
         if (M5.BtnA.isPressed()) {
-
+            // Reset pitch
             M5.Lcd.fillScreen(GREEN);
             M5.Lcd.setCursor(0,0);
             M5.Lcd.print("resetting");    
             M5.Axp.SetLDOEnable(3, true);
-
             circle_x = lcd.width() / 2;
             circle_y = lcd.height() / 2;
-
         }
 
         if (M5.BtnA.wasReleased()){
-
-            M5.IMU.getAhrsData(
-            &tempitch, &temroll,&temyaw);
-
+            // Store current pitch, roll, and yaw values
+            M5.IMU.getAhrsData(&tempitch, &temroll,&temyaw);
             M5.Lcd.fillScreen(BLACK);
             M5.Axp.SetLDOEnable(3, false);
-
         }
 
+        // Calculate pitch, roll, and yaw differences
         repitch = pitch - tempitch ;
         reroll = roll - temroll;
         reyaw = yaw - temyaw;
 
-        M5.IMU.getAhrsData(
-            &pitch, &roll,
-            &yaw); // Stores the inertial sensor attitude.  存储惯性传感器的姿态
+        M5.IMU.getAhrsData(&pitch, &roll, &yaw); // Stores the inertial sensor attitude
         sprite.fillScreen(BLACK);
         sprite.setCursor(0, 0);
 
         if (millis() - quiz_time > quiz_limit){
-
             printq = 4;
-            
         }
 
         quiz_limit = (10 /((combo / 10) + 1)) * (10 / quiz_difficulty) * 70 ;
 
         if (printq == 4){
-
+            // Game over
             sprite.setCursor(20, 65);
             sprite.setTextSize(5);
             sprite.printf("GAME OVER");
@@ -232,11 +224,10 @@ void loop()
         }
 
         if (printq != 4) {
-            
             limit_time = millis() - quiz_time;
             
             if (printq == 2) {
-                if (ans[goal_st % 4] == 1) { //正解
+                if (ans[goal_st % 4] == 1) { // Correct answer
                     printq = 3;
                     srand(time(NULL));
                     question = 0 + (int)(rand() * (quiz_difficulty * 5 - 0 + 1.0) / (1.0 + RAND_MAX));
@@ -244,15 +235,16 @@ void loop()
                     millis_time = 0;
                     vibration();
                     combo += 1;
-                } else { //不正解
+                } else { // Incorrect answer
                     printq = 4;
-                    M5.Axp.SetLDOEnable(3, true);  // 3番をtrueにしてバイブレーション開始
-                    delay(3000);                   // バイブレーションの長さ（ms）はお好みで調整
-                    M5.Axp.SetLDOEnable(3, false); // 3番をfalseにしてバイブレーション修了
+                    M5.Axp.SetLDOEnable(3, true);  // Start vibration
+                    delay(3000);                   // Vibration duration (ms)
+                    M5.Axp.SetLDOEnable(3, false); // Stop vibration
                 }
             }
 
             if (printq == 3) {
+                // Prepare for the next question
                 quiz = "";
                 for (j = 0; j < 4; j++)
                     ans[j] = 0;
@@ -299,7 +291,7 @@ void loop()
                 }
             }
 
-            // 円の座標の指定
+            // Update circle position
             circle_x += repitch / 2 ;
             circle_y += reroll / 2 ;
             if (circle_y <= 0) {
@@ -325,36 +317,20 @@ void loop()
             sprite.fillRect(lcd.width() * limit_time/quiz_limit/2, lcd.height() * limit_time/quiz_limit/2, 
             lcd.width() * (quiz_limit-limit_time)/quiz_limit, lcd.height() * (quiz_limit-limit_time)/quiz_limit, RED);
         }
-        // sprite.setTextSize(5);
-        // sprite.printf("%d",printq);
-        // sprite.setTextSize(1);
-        // sprite.setCursor(0, 120);
-        // sprite.printf("up_j,  down_j,  right_j,  left_j");
-        // sprite.setCursor(0, 20);
-        // sprite.printf("%d  %d  %d  %d",ans[0], ans[1], ans[2], ans[3]);
-        // sprite.setCursor(0, 165);
-        // sprite.printf("%5.2f  %5.2f  %5.2f ", repitch, reroll, reyaw);
         
         sprite.setCursor(15, 95);
         sprite.setTextSize(3);
         sprite.printf(quiz.c_str());
         sprite.setCursor(15, 10);
         sprite.setTextSize(3);
-        
         sprite.printf("%d",quiz_limit - (limit_time));
         sprite.setCursor(lcd.width()-50, 10);
         sprite.setTextSize(3);
-        
         sprite.printf("%d",combo);
-        // sprite.setCursor(60, 50);
-        // sprite.setTextSize(3);
-        // sprite.printf("%d",test);
         
         sprite.fillCircle(circle_x, circle_y, 6, BLUE);
         sprite.pushSprite(0,0);
 
         i += 1 ;
-        
-        // delay(10); // Delay 10ms.  延迟10ms
     }
 }
