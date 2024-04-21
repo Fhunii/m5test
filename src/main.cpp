@@ -324,15 +324,7 @@ void loop()
             sprite.fillRect(lcd.width() * limit_time/quiz_limit/2, lcd.height() * limit_time/quiz_limit/2, 
             lcd.width() * (quiz_limit-limit_time)/quiz_limit, lcd.height() * (quiz_limit-limit_time)/quiz_limit, RED);
         }
-        // sprite.setTextSize(5);
-        // sprite.printf("%d",printq);
-        // sprite.setTextSize(1);
-        // sprite.setCursor(0, 120);
-        // sprite.printf("up_j,  down_j,  right_j,  left_j");
-        // sprite.setCursor(0, 20);
-        // sprite.printf("%d  %d  %d  %d",ans[0], ans[1], ans[2], ans[3]);
-        // sprite.setCursor(0, 165);
-        // sprite.printf("%5.2f  %5.2f  %5.2f ", repitch, reroll, reyaw);
+        
         
         sprite.setCursor(15, 95);
         sprite.setTextSize(3);
@@ -345,15 +337,12 @@ void loop()
         sprite.setTextSize(3);
         
         sprite.printf("%d",combo);
-        // sprite.setCursor(60, 50);
-        // sprite.setTextSize(3);
-        // sprite.printf("%d",test);
+      
         
         sprite.fillCircle(circle_x, circle_y, 6, BLUE);
         sprite.pushSprite(0,0);
 
         i += 1 ;
         
-        // delay(10); // Delay 10ms.  延迟10ms
     }
 }
